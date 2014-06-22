@@ -160,7 +160,3 @@ class Ipbubbles::Rule
     # validations here
   end
 end
-
-# def rule(&block)
-#   Docile.dsl_eval(Ipbubbles::RuleBuilder.new(), &block).build
-# end

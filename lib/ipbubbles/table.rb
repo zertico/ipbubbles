@@ -13,7 +13,3 @@ class Ipbubbles::Table
     output
   end
 end
-
-# def rule(&block)
-#   Docile.dsl_eval(Ipbubbles::RuleBuilder.new(), &block).build
-# end

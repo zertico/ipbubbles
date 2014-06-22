@@ -1,15 +1,16 @@
-class Ipbubbles::Table::ChainsBuilder
+class Ipbubbles::Chain::ElementBuilder
   
-  def initialize (chains, opts)
+  def initialize (elements, kind, opts)
     @rules = []
     @opts = opts
-    @chains = chains
+    @kind = kind
+    @elements = elements
   end
   
   def rule(name = nil, &block)
-    @chains.each do |chain|
+    @elements.each do |element|
       rule_opts = @opts.clone
-      rule_opts[:chain] = chain
+      rule_opts[@kind.to_sym] = element
       created_rule = Docile.dsl_eval(Ipbubbles::RuleBuilder.new(name, rule_opts), &block).build
       @rules << created_rule
       created_rule
@@ -18,6 +19,6 @@ class Ipbubbles::Table::ChainsBuilder
   end
   
   def build
-    Ipbubbles::Chain.new(@inputs, @rules)
+    Ipbubbles::Chain.new(@opts, @rules)
   end
 end

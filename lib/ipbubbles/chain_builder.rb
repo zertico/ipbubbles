@@ -20,24 +20,10 @@ class Ipbubbles::ChainBuilder
   def destination_port(v);    @opts[:destination_port] = v; self; end
   def source(*args)           @opts[:source]           = args; self; end
 
-  def destinations(destinations, &block);
-    @rules << Docile.dsl_eval(Ipbubbles::Chain::DestinationsBuilder.new(destinations, @opts.clone), &block).build
-  end
-  
-  def inputs(inputs, &block);
-    @rules << Docile.dsl_eval(Ipbubbles::Chain::InputsBuilder.new(inputs, @opts.clone), &block).build
-  end
-  
-  def outputs(outputs, &block);
-    @rules << Docile.dsl_eval(Ipbubbles::Chain::OutputsBuilder.new(outputs, @opts.clone), &block).build
-  end
-  
-  def source_ports(source_ports, &block);
-    @rules << Docile.dsl_eval(Ipbubbles::Chain::SourcePortsBuilder.new(source_ports, @opts.clone), &block).build
-  end
-  
-  def ports(ports, &block);
-    @rules << Docile.dsl_eval(Ipbubbles::Chain::PortsBuilder.new(ports, @opts.clone), &block).build
+  %w(destination input output source_port).each do |method|
+    define_method((method+"s").to_sym) do |elements, &block|
+      @rules << Docile.dsl_eval(Ipbubbles::Chain::ElementBuilder.new(elements, method, @opts.clone), &block).build
+    end
   end
   
   def rule(name = nil, &block)
